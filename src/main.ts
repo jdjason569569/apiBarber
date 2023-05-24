@@ -7,5 +7,7 @@ async function bootstrap() {
     origin:"*",
     });
   await app.listen(3000);
+  console.log('barber api in 3000');
+  
 }
 bootstrap();
