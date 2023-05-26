@@ -14,12 +14,11 @@ export class TurnService {
     }
 
      async findTaskById(id: number){
-        return await this.turnRepo.find({ where: { id_turn: id }});
+        return await this.turnRepo.find({ where: { id: id }});
     }
 
     create(body: Turn){
-        console.log('save turn');
-        
+        body.date_register = new Date();
         const newTask = this.turnRepo.create(body);
         return this.turnRepo.save(newTask);
     }

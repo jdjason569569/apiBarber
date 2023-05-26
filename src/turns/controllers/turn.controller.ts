@@ -7,7 +7,6 @@ export class TurnController {
 
     constructor(private turnService: TurnService){}
 
-
     @Get()
     getAll(){
         return this.turnService.findAll();
