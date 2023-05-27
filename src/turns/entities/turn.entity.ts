@@ -14,5 +14,7 @@ export class Turn {
   @Column()
   date_register: Date;
 
+  @Column()
+  order: number;
 
 }

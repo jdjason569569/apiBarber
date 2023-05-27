@@ -14,7 +14,12 @@ export class TurnController {
 
     @Post()
     create(@Body() body: any){    
-      return this.turnService.create(body);
+      return this.turnService.create(body, false);
+    }
+
+    @Put('order/create')
+    async createOrder(@Body() body: any){    
+      return await this.turnService.orderCreate(body);
     }
     
     @Put(':id')
