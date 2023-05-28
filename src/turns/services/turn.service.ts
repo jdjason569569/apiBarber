@@ -18,9 +18,12 @@ export class TurnService {
     }
 
     async orderCreate(body: Turn[]){
+        console.log('body -> ',body);
+        await this.turnRepo.clear();
         for (const turn of body) {
-            return await this.create(turn, true);
+             await this.create(turn, true);
         }
+        return true;
     }
 
     async create(body: Turn, isDelete: boolean){
