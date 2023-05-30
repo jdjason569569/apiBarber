@@ -17,10 +17,10 @@ export class TurnController {
       return this.turnService.create(body, false);
     }
 
-    @Put('order/create')
-    async createOrder(@Body() body: any){    
-      console.log('order/create');
-      return await this.turnService.orderCreate(body);
+    @Put('order/update/:newIndex')
+    async createOrder(@Param('newIndex', ParseIntPipe) newIndex: number,@Body() body: any){    
+      console.log('order/update');
+      return await this.turnService.orderCreate(body, newIndex);
     }
     
     @Put(':id')

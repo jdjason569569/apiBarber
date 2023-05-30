@@ -15,10 +15,22 @@ export class TurnService {
     return await this.turnRepo.find({ where: { id: id } });
   }
 
-  async orderCreate(body: Turn[]) {
-    await this.turnRepo.clear();
-    for (const turn of body) {
-      await this.create(turn, true);
+  async orderCreate(body: Turn[], newIndex: number) {
+    try {
+      let countTime = 0;
+      body[newIndex].date_register = body[newIndex + 1].date_register;
+      const dateInitial = new Date(body[newIndex].date_register);
+      await this.update(body[newIndex].id, body[newIndex]);
+      let indexAdd = newIndex + 1
+      for (const turn of body.slice(indexAdd)) {
+        turn.date_register = new Date(
+          dateInitial.getTime() + (countTime += 20) * 60000,
+        );
+        await this.update(turn.id, turn);
+        indexAdd++;
+      }
+    } catch (error) {
+      console.log(error);
     }
     return true;
   }
@@ -53,14 +65,15 @@ export class TurnService {
 
   async update(id: any, body: any) {
     const [originalTurn] = await this.findTurnById(id);
-    this.turnRepo.merge(originalTurn, body);
+    originalTurn.order = body.order;
+    originalTurn.date_register = body.date_register;
     return this.turnRepo.save(originalTurn);
   }
 
   async delete(id: number) {
     let count = 1;
     const turnsIniitial = await this.findAll();
-    const deleteTurn = turnsIniitial.find((element) => (element.id === id));
+    const deleteTurn = turnsIniitial.find((element) => element.id === id);
     var posicionDeleteTurn = turnsIniitial.indexOf(deleteTurn);
     await this.turnRepo.delete(id);
     const turns = await this.findAll();
@@ -68,12 +81,13 @@ export class TurnService {
       for (const turn of turns) {
         turn.order = count++;
       }
-      let countTime = 0;
+      let countTime = -20;
       for (const turn of turns.slice(posicionDeleteTurn)) {
         turn.date_register = new Date(
-          deleteTurn.date_register.getTime() + ((countTime += 20) * 60000),
+          deleteTurn.date_register.getTime() + (countTime += 20) * 60000,
         );
         await this.update(turn.id, turn);
+        posicionDeleteTurn++;
       }
     }
     return true;
