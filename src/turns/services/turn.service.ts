@@ -2,10 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Turn } from '../entities/turn.entity';
+import { NotificationService } from 'src/utilityServices/notification.service';
 
 @Injectable()
 export class TurnService {
-  constructor(@InjectRepository(Turn) private turnRepo: Repository<Turn>) {}
+  constructor(@InjectRepository(Turn) private turnRepo: Repository<Turn>, private notificationsService: NotificationService) {}
 
   async findAll() {
     return await this.turnRepo.find({ order: { order: 'ASC' } });
@@ -48,6 +49,7 @@ export class TurnService {
         body.date_register = new Date(maxDate.getTime() + 20 * 60000);
       }
     }
+    await this.notificationsService.sendEmail(body, 'new');
     return this.turnRepo.save(this.turnRepo.create(body));
   }
 

@@ -3,13 +3,14 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Turn } from './entities/turn.entity';
 import { TurnService } from './services/turn.service';
 import { TurnController } from './controllers/turn.controller';
+import { NotificationService } from 'src/utilityServices/notification.service';
 
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Turn])  
   ],
-  providers: [TurnService],
+  providers: [TurnService, NotificationService],
   controllers: [TurnController]
 })
 export class TurnModule {}

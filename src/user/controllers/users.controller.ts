@@ -19,8 +19,6 @@ export class UsersController {
         return this.userService.findAll();
     }
 
-
-
     @Post()
     create(@Body() body: users) {
         body.register = new Date();

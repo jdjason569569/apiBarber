@@ -8,6 +8,9 @@ export class Turn {
   @Column()
   name: string;
 
+  @Column()
+  email: string;
+
   @Column({default: false})
   completed: boolean;
 
