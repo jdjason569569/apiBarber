@@ -22,11 +22,16 @@ export class TurnService {
       body[newIndex].date_register = body[newIndex + 1].date_register;
       const dateInitial = new Date(body[newIndex].date_register);
       await this.update(body[newIndex].id, body[newIndex]);
+      body[newIndex].date_register = dateInitial;
+      this.notificationsService.sendEmail(body[newIndex], 'turnChange');
+
       let indexAdd = newIndex + 1
+       
       for (const turn of body.slice(indexAdd)) {
         turn.date_register = new Date(
           dateInitial.getTime() + (countTime += 20) * 60000,
         );
+        this.notificationsService.sendEmail(turn, 'turnChange');
         await this.update(turn.id, turn);
         indexAdd++;
       }
