@@ -6,7 +6,10 @@ import { NotificationService } from 'src/utilityServices/notification.service';
 
 @Injectable()
 export class TurnService {
-  constructor(@InjectRepository(Turn) private turnRepo: Repository<Turn>, private notificationsService: NotificationService) {}
+  constructor(
+    @InjectRepository(Turn) private turnRepo: Repository<Turn>,
+    private notificationsService: NotificationService,
+  ) {}
 
   async findAll() {
     return await this.turnRepo.find({ order: { order: 'ASC' } });
@@ -25,8 +28,8 @@ export class TurnService {
       body[newIndex].date_register = dateInitial;
       this.notificationsService.sendEmail(body[newIndex], 'turnChange');
 
-      let indexAdd = newIndex + 1
-       
+      let indexAdd = newIndex + 1;
+
       for (const turn of body.slice(indexAdd)) {
         turn.date_register = new Date(
           dateInitial.getTime() + (countTime += 20) * 60000,
@@ -96,6 +99,20 @@ export class TurnService {
         await this.update(turn.id, turn);
         posicionDeleteTurn++;
       }
+    }
+    return true;
+  }
+
+  async postpone(body: Turn[]) {
+    try {
+      for (const turn of body) {
+        turn.date_register = new Date(turn.date_register);
+        turn.date_register.setMinutes(turn.date_register.getMinutes() + 10);
+        this.notificationsService.sendEmail(turn, 'turnPostpone');
+        await this.update(turn.id, turn);
+      }
+    } catch (error) {
+      console.log(error);
     }
     return true;
   }

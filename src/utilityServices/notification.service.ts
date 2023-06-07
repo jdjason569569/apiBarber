@@ -17,7 +17,14 @@ export class NotificationService {
         reasonText = `Se te ha asignado un turno a las ${turn.date_register.getHours()}: ${turn.date_register.getMinutes()}, por favor espera notificaciones`;
         break;
       case 'turnChange':
-        reasonText = `Se ha cambiado tu turno a las ${turn.date_register.getHours()}: ${turn.date_register.getMinutes()}, tu turno es ${turn.order}, por favor espera notificaciones`;
+        reasonText = `Se ha cambiado tu turno a las ${turn.date_register.getHours()}: ${turn.date_register.getMinutes()}, tu turno es ${
+          turn.order
+        }, por favor espera notificaciones`;
+        break;
+      case 'turnPostpone':
+        reasonText = `Se ha corrido tu turno 10 minutos  ahora es a las ${turn.date_register.getHours()}: ${turn.date_register.getMinutes()}, tu turno es ${
+          turn.order
+        }, por favor espera notificaciones`;
         break;
     }
 

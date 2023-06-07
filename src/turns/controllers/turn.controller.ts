@@ -32,6 +32,13 @@ export class TurnController {
     return await this.turnService.orderCreate(body, newIndex);
   }
 
+  @Put('postpone')
+  async postpone(
+    @Body() body: any,
+  ) {
+    return await this.turnService.postpone(body);
+  }
+
   @Put(':id')
   Update(@Param('id') id: number, @Body() body: any) {
     return this.turnService.update(id, body);
