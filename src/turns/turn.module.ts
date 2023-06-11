@@ -6,9 +6,11 @@ import { TurnController } from './controllers/turn.controller';
 import { NotificationService } from 'src/utilityServices/notification.service';
 
 
+
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Turn])  
+    TypeOrmModule.forFeature([Turn]),
+    
   ],
   providers: [TurnService, NotificationService],
   controllers: [TurnController]

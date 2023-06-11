@@ -84,6 +84,7 @@ export class TurnService {
     let count = 1;
     const turnsIniitial = await this.findAll();
     const deleteTurn = turnsIniitial.find((element) => element.id === id);
+    this.notificationsService.sendEmail(deleteTurn, 'deleteTurnNotification');
     var posicionDeleteTurn = turnsIniitial.indexOf(deleteTurn);
     await this.turnRepo.delete(id);
     const turns = await this.findAll();
@@ -96,6 +97,7 @@ export class TurnService {
         turn.date_register = new Date(
           deleteTurn.date_register.getTime() + (countTime += 20) * 60000,
         );
+        this.notificationsService.sendEmail(turn, 'deleteTurn');
         await this.update(turn.id, turn);
         posicionDeleteTurn++;
       }
@@ -105,6 +107,7 @@ export class TurnService {
 
   async postpone(body: Turn[]) {
     try {
+      await this.notificationsService.sendWhatsapp();
       for (const turn of body) {
         turn.date_register = new Date(turn.date_register);
         turn.date_register.setMinutes(turn.date_register.getMinutes() + 10);

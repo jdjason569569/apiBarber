@@ -33,9 +33,7 @@ export class TurnController {
   }
 
   @Put('postpone')
-  async postpone(
-    @Body() body: any,
-  ) {
+  async postpone(@Body() body: any) {
     return await this.turnService.postpone(body);
   }
 
