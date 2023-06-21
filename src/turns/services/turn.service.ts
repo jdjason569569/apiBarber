@@ -107,7 +107,6 @@ export class TurnService {
 
   async postpone(body: Turn[]) {
     try {
-      await this.notificationsService.sendWhatsapp();
       for (const turn of body) {
         turn.date_register = new Date(turn.date_register);
         turn.date_register.setMinutes(turn.date_register.getMinutes() + 10);

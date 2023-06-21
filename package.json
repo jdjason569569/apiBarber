@@ -26,6 +26,7 @@
     "@nestjs/platform-express": "^9.0.0",
     "@nestjs/schedule": "^2.2.1",
     "@nestjs/typeorm": "^9.0.1",
+    "@vonage/server-sdk": "^3.5.1",
     "dotenv": "^16.0.3",
     "nodemailer": "^6.9.2",
     "pg": "^8.10.0",
