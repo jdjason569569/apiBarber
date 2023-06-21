@@ -4,11 +4,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ScheduleModule } from '@nestjs/schedule';
 import { TurnModule } from './turns/turn.module';
 import { MailerModule } from '@nestjs-modules/mailer';
+import { CustomersModule } from './customers/customers.module';
 require('dotenv').config()
 
 
 @Module({
-  imports: [UserModule, TurnModule, ScheduleModule.forRoot(),TypeOrmModule.forRoot({
+  imports: [UserModule, TurnModule, CustomersModule,ScheduleModule.forRoot(),TypeOrmModule.forRoot({
     type: 'postgres',
     host: process.env.DB_HOST,
     port: parseInt(process.env.DB_PORT || '5432') ,

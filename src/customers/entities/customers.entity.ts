@@ -1,23 +1,16 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
-export class Turn {
+export class Customer {
   @PrimaryGeneratedColumn()
-  id: number;
-
-  @Column({default: false})
-  completed: boolean;
+  id_customer: number;
 
   @Column()
-  date_register: Date;
+  name: string;
 
   @Column()
-  order: number;
+  email: string;
 
   @Column()
   id_users: number;
-
-  @Column()
-  id_customer: number;
-
 }
