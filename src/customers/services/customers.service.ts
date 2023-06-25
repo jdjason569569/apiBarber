@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { NotificationService } from 'src/utilityServices/notification.service';
 import { Customer } from '../entities/Customers.entity';
+import { users } from 'src/user/entities/users.entity';
 
 @Injectable()
 export class CustomerService {
@@ -21,11 +22,9 @@ export class CustomerService {
 
   async create(body: Customer) {
     try {
-      console.log('body Customer ->', body);
       return await this.customerRepo.save(this.customerRepo.create(body));
     } catch (error) {
       console.error('Error al crear el cliente:', error);
-      // Manejar el error según tus necesidades, como lanzar una excepción personalizada o retornar un mensaje de error
       throw new Error('No se pudo crear el cliente');
     }
   }

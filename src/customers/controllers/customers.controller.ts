@@ -15,7 +15,6 @@ export class CustomersController {
 
     @Get()
     getAll() {
-        console.log('getAll');
         return this.customersService.findAll();
     }
 

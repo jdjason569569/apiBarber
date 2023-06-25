@@ -3,16 +3,23 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Turn } from '../entities/turn.entity';
 import { NotificationService } from 'src/utilityServices/notification.service';
+import { Customer } from 'src/customers/entities/customers.entity';
+import { users } from 'src/user/entities/users.entity';
 
 @Injectable()
 export class TurnService {
   constructor(
     @InjectRepository(Turn) private turnRepo: Repository<Turn>,
+    @InjectRepository(Customer) private customerRepo: Repository<Customer>,
     private notificationsService: NotificationService,
   ) {}
 
   async findAll() {
     return await this.turnRepo.find({ order: { order: 'ASC' } });
+  }
+
+  async getAllTurnCustomer() {
+    return await this.turnRepo.find({ relations: ['customer'] });
   }
 
   async findTurnById(id: number) {
@@ -45,7 +52,15 @@ export class TurnService {
   }
 
   async create(body: Turn, isDelete: boolean) {
+    const turn = new Turn();
     if (!isDelete) {
+      const customer = new Customer();
+      customer.name = body.customer.name;
+      customer.email = body.customer.email;
+      const user = new users();
+      user.id_users = body.customer.user.id_users;
+      customer.user =  user;
+      const responseCustomer = await this.customerRepo.save(customer);
       const turns = await this.findAll();
       if (turns.length === 0) {
         body.order = 1;
@@ -56,9 +71,14 @@ export class TurnService {
         let maxDate = this.maxDate(turns);
         body.date_register = new Date(maxDate.getTime() + 20 * 60000);
       }
+
+      turn.completed = false;
+      turn.order = body.order;
+      turn.date_register = body.date_register;
+      turn.customer = responseCustomer;
     }
     await this.notificationsService.sendEmail(body, 'new');
-    return this.turnRepo.save(this.turnRepo.create(body));
+    return this.turnRepo.save(turn);
   }
 
   private maxOrder(turns: Turn[]) {

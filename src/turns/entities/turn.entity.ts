@@ -1,11 +1,18 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Customer } from 'src/customers/entities/customers.entity';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  OneToOne,
+  JoinColumn,
+} from 'typeorm';
 
 @Entity()
 export class Turn {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({default: false})
+  @Column({ default: false })
   completed: boolean;
 
   @Column()
@@ -14,10 +21,8 @@ export class Turn {
   @Column()
   order: number;
 
-  @Column()
-  id_users: number;
 
-  @Column()
-  id_customer: number;
-
+  @OneToOne(() => Customer)
+  @JoinColumn({name: 'id_customer'})
+  customer: Customer;
 }

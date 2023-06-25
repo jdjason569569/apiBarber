@@ -4,12 +4,13 @@ import { Turn } from './entities/turn.entity';
 import { TurnService } from './services/turn.service';
 import { TurnController } from './controllers/turn.controller';
 import { NotificationService } from 'src/utilityServices/notification.service';
+import { Customer } from 'src/customers/entities/customers.entity';
 
 
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Turn]),
+    TypeOrmModule.forFeature([Turn, Customer]),
     
   ],
   providers: [TurnService, NotificationService],

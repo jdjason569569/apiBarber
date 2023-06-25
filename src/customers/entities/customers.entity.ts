@@ -1,4 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Turn } from 'src/turns/entities/turn.entity';
+import { users } from 'src/user/entities/users.entity';
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne, ManyToOne, JoinColumn } from 'typeorm';
 
 @Entity()
 export class Customer {
@@ -11,6 +13,10 @@ export class Customer {
   @Column()
   email: string;
 
-  @Column()
-  id_users: number;
+  @ManyToOne(() => users, (user)=>user.customers)
+  @JoinColumn({name: 'id_users'})
+  user: users
+
+  @OneToOne(() => Turn, (turn)=> turn.customer)
+  turn: Turn;
 }

@@ -19,6 +19,12 @@ export class TurnController {
     return this.turnService.findAll();
   }
 
+  @Get('turncustomer')
+  getAllTurnCustomer() {
+    return this.turnService.getAllTurnCustomer();
+  }
+
+
   @Post()
   create(@Body() body: any) {
     return this.turnService.create(body, false);
