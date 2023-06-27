@@ -5,6 +5,7 @@ import { TurnService } from './services/turn.service';
 import { TurnController } from './controllers/turn.controller';
 import { NotificationService } from 'src/utilityServices/notification.service';
 import { Customer } from 'src/customers/entities/customers.entity';
+import { CustomerService } from 'src/customers/services/customers.service';
 
 
 
@@ -13,7 +14,7 @@ import { Customer } from 'src/customers/entities/customers.entity';
     TypeOrmModule.forFeature([Turn, Customer]),
     
   ],
-  providers: [TurnService, NotificationService],
+  providers: [TurnService, NotificationService, CustomerService],
   controllers: [TurnController]
 })
 export class TurnModule {}

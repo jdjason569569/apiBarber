@@ -16,6 +16,10 @@ export class CustomerService {
     return this.customerRepo.find();
   }
 
+  async findCustomerByEmail(email: string): Promise<Customer> {
+    return this.customerRepo.findOne({ where: { email: email } });
+  }
+
   findUser(id: string): Promise<Customer> {
     return this.customerRepo.findOne({ where: { id_customer: +id } });
   }

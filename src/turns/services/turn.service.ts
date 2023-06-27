@@ -5,12 +5,14 @@ import { Turn } from '../entities/turn.entity';
 import { NotificationService } from 'src/utilityServices/notification.service';
 import { Customer } from 'src/customers/entities/customers.entity';
 import { users } from 'src/user/entities/users.entity';
+import { CustomerService } from 'src/customers/services/customers.service';
 
 @Injectable()
 export class TurnService {
   constructor(
     @InjectRepository(Turn) private turnRepo: Repository<Turn>,
     @InjectRepository(Customer) private customerRepo: Repository<Customer>,
+    private serviceCustomer: CustomerService,
     private notificationsService: NotificationService,
   ) {}
 
@@ -51,32 +53,36 @@ export class TurnService {
     return true;
   }
 
-  async create(body: Turn, isDelete: boolean) {
-    const turn = new Turn();
-    if (!isDelete) {
+  async create(body: Turn, method: string) {
+    let responseCustomer = null;
+    if (method === 'turnCustomer') {
       const customer = new Customer();
       customer.name = body.customer.name;
       customer.email = body.customer.email;
+
       const user = new users();
       user.id_users = body.customer.user.id_users;
-      customer.user =  user;
-      const responseCustomer = await this.customerRepo.save(customer);
-      const turns = await this.findAll();
-      if (turns.length === 0) {
-        body.order = 1;
-        body.date_register = new Date();
-      }
-      if (turns.length > 0) {
-        body.order = this.maxOrder(turns) + 1;
-        let maxDate = this.maxDate(turns);
-        body.date_register = new Date(maxDate.getTime() + 20 * 60000);
-      }
-
-      turn.completed = false;
-      turn.order = body.order;
-      turn.date_register = body.date_register;
-      turn.customer = responseCustomer;
+      customer.user = user;
+      responseCustomer = await this.customerRepo.save(customer);
+    } else {
+      responseCustomer = await this.serviceCustomer.findCustomerByEmail(body.customer.email);
     }
+
+    const turns = await this.findAll();
+    if (turns.length === 0) {
+      body.order = 1;
+      body.date_register = new Date();
+    }
+    if (turns.length > 0) {
+      body.order = this.maxOrder(turns) + 1;
+      let maxDate = this.maxDate(turns);
+      body.date_register = new Date(maxDate.getTime() + 20 * 60000);
+    }
+    const turn = new Turn();
+    turn.completed = false;
+    turn.order = body.order;
+    turn.date_register = body.date_register;
+    turn.customer = responseCustomer;
     await this.notificationsService.sendEmail(body, 'new');
     return this.turnRepo.save(turn);
   }

@@ -25,9 +25,10 @@ export class TurnController {
   }
 
 
-  @Post()
-  create(@Body() body: any) {
-    return this.turnService.create(body, false);
+  @Post(':method')
+  create(@Param('method') method: string,
+  @Body() body: any,) {
+    return this.turnService.create(body, method);
   }
 
   @Put('order/update/:newIndex')
