@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { NotificationService } from 'src/utilityServices/notification.service';
-import { Customer } from '../entities/Customers.entity';
-import { users } from 'src/user/entities/users.entity';
+import { Customer } from '../entities/customers.entity';
+
 
 @Injectable()
 export class CustomerService {
