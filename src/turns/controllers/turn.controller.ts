@@ -24,10 +24,8 @@ export class TurnController {
     return this.turnService.getAllTurnCustomer();
   }
 
-
   @Post(':method')
-  create(@Param('method') method: string,
-  @Body() body: any,) {
+  create(@Param('method') method: string, @Body() body: any) {
     return this.turnService.create(body, method);
   }
 

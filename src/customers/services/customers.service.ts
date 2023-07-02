@@ -26,11 +26,16 @@ export class CustomerService {
 
   async create(body: Customer) {
     try {
-      return await this.customerRepo.save(this.customerRepo.create(body));
+      const existCustomer = await this.findCustomerByEmail(body.email);
+      if(!existCustomer){
+        return await this.customerRepo.save(this.customerRepo.create(body));
+      }
     } catch (error) {
       console.error('Error al crear el cliente:', error);
       throw new Error('No se pudo crear el cliente');
     }
+    //Todo enviar una respuesta correcta
+    return false;
   }
 
   async update(id: any, body: any) {

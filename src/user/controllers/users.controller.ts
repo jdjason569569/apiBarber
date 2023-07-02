@@ -15,7 +15,6 @@ export class UsersController {
 
     @Get()
     getAll() {
-        console.log('getAll');
         return this.userService.findAll();
     }
 

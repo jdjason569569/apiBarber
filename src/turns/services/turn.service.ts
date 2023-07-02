@@ -21,7 +21,10 @@ export class TurnService {
   }
 
   async getAllTurnCustomer() {
-    return await this.turnRepo.find({ relations: ['customer'] });
+    return await this.turnRepo.find({
+      relations: ['customer'],
+      order: { order: 'ASC' }
+    });
   }
 
   async findTurnById(id: number) {
@@ -35,7 +38,7 @@ export class TurnService {
       const dateInitial = new Date(body[newIndex].date_register);
       await this.update(body[newIndex].id, body[newIndex]);
       body[newIndex].date_register = dateInitial;
-      this.notificationsService.sendEmail(body[newIndex], 'turnChange');
+      //this.notificationsService.sendEmail(body[newIndex], 'turnChange');
 
       let indexAdd = newIndex + 1;
 
@@ -43,7 +46,7 @@ export class TurnService {
         turn.date_register = new Date(
           dateInitial.getTime() + (countTime += 20) * 60000,
         );
-        this.notificationsService.sendEmail(turn, 'turnChange');
+        //this.notificationsService.sendEmail(turn, 'turnChange');
         await this.update(turn.id, turn);
         indexAdd++;
       }
@@ -65,7 +68,9 @@ export class TurnService {
       customer.user = user;
       responseCustomer = await this.customerRepo.save(customer);
     } else {
-      responseCustomer = await this.serviceCustomer.findCustomerByEmail(body.customer.email);
+      responseCustomer = await this.serviceCustomer.findCustomerByEmail(
+        body.customer.email,
+      );
     }
 
     const turns = await this.findAll();
